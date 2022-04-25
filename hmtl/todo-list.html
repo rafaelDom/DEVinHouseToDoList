@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
+    <title>To Do List</title>
+</head>
+<body onload="carregarNaListaOlocalStorage()">
+    <header>
+        <p>To Do List Módulo 2 - Projeto 1</p>
+        <img src="../img/logo-dev-in-01.png" alt="Logo DevIn House">
+    </header>
+    <div class="geralLista">
+        <div class="inserirItemLista">
+            <h1>Inserir item na lista:</h1>
+            <input type="text" id="itemLista">
+            <button onclick="inserirItemLista()">Inserir</button>
+            <ul id="lista"></ul>
+        </div>
+    </div>
+
+    <script src="../js/js.js"></script>
+</body>
+</html>
