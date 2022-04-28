@@ -4,19 +4,41 @@
 }
 
 header{
-    font-weight: bolder;
-    text-align: end;
-    margin-top: 10px;
-    margin-right: 50px;
+    display: flex;
+    justify-content: end;
+    text-align: center;
 }
 
-header > img{
-    width: 300px;
+#logo > img{
+    margin-top: 10px;
+    width: 250px;
+}
+
+#logo {
+    width: 270px;
+    height: 110px;
+    background-color: #ffffff;
+    border-radius: 5px;
+    margin: 10px;
+    box-shadow: 7px 7px 13px 0px rgba(50, 50, 50, 0.22);
+    border-left: 3px solid #343a40;
+}
+
+header > p{
+    margin-right: 40px;
 }
 
 body{
-    font-family: 'Josefin Sans', sans-serif;
-    background:  linear-gradient( -0.2turn, #00C89D, #A0ADBA);
+    background:  linear-gradient( -0.2turn, #DCDCDC, #ffffff);
+    box-shadow: inset 0 0 5em 1em #343a40;
+    width: 100vw;
+    height: 100vh;
+    font-family: 'Bebas Neue', cursive;
+}
+
+h1{
+    font-family: 'Sigmar One', cursive;
+    font-size: 2.5rem;
 }
 
 .geralLista{
@@ -26,31 +48,36 @@ body{
 
 .inserirItemLista{
     margin-top: 50px;
-    font-size: 2rem;
+    font-size: 1.5rem;
     width: 50%;
 }
 
 .inserirItemLista > input{
     width: 400px;
-    height: 30px;
+    height: 25px;
     border-radius: 5px;
+    border-width: 0.5px;
+    padding: 5px;
+    margin-left: 5px;
 }
 
 .inserirItemLista > button{
-    width: 100px;
-    height: 30px;
-    background-color: black;
-    color: white;
+    width: 80px;
+    height: 35px;
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+    border-style: none;
     font-size: 1rem;
-    font-weight: bolder;
     border: none;
     border-radius: 5px;
 }
 
 #lista{
     margin-top: 50px;
-    background-color: black;
-    color: white;
+    color: #fff;
+    background-color: #343a40;
+    border-color: #343a40;
     width: 450px;
     border-radius: 5px;
 }
@@ -70,4 +97,71 @@ body{
     border-radius: 50%;
     border-color: white;
     margin-left: 10px;
+    border-style: none;
 }
+
+.popupValorItem {
+    position: fixed;
+    bottom: 65%;
+    right: 45%;
+    height: 150px;
+    width: 300px;
+    text-align: center;
+    color: black;
+    font-size: 1.5rem;
+    background-color: #ffffff;
+    display: none;
+  }
+
+  .fechar {
+    position: absolute;
+    width: 30px;
+    right: -15px;
+    top: -20px;
+    text-align: center;
+    line-height: 30px;
+    margin-top: 5px;
+    background: #ff4545;
+    border-radius: 50%;
+    font-size: 1rem;
+    color: black;
+
+  }
+
+  .popupValorItem > input{
+      margin-bottom: 10px;
+      border-radius: 5px;
+      border-width: 0.5px;
+      height: 20px;
+      border-color: black;
+      padding: 5px;
+  }
+
+  .popupValorItem > h2{
+      margin-bottom: 10px;
+  }
+
+  #btns > button{
+    border-radius: 5px;
+    width: 70px;
+    height: 20px;
+    margin-left: 10px;
+  }
+
+  #btnGravar{
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+    border-style: none;
+  }
+
+  #btnCancelar{
+    color: #fff;
+    background-color: #6c757d;
+    border-color: #6c757d;
+    border-style: none;
+  }
+
+  #btns{
+      margin-left: 30px;
+  }

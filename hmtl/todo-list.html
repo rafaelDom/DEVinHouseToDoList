@@ -7,14 +7,21 @@
     <link rel="stylesheet" href="../css/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@300&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Sigmar+One&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css">
     <title>To Do List</title>
 </head>
 <body onload="carregarNaListaOlocalStorage()">
     <header>
-        <p>To Do List Módulo 2 - Projeto 1</p>
-        <img src="../img/logo-dev-in-01.png" alt="Logo DevIn House">
+        <div id="logo">
+            <img src="../img/logo-dev-in-01.png" alt="Logo DevIn House">
+            <p>To Do List Módulo 2 - Projeto 1</p>
+        </div>
     </header>
     <div class="geralLista">
         <div class="inserirItemLista">
@@ -25,6 +32,19 @@
         </div>
     </div>
 
+    <div id="popupValorItem" class="popupValorItem">
+        <a href="" onclick="closePopupValorItem()" title="Fechar" class="fechar">x</a>
+        <h2>Valor do Item</h2>
+        <label for="valorItem">Valor:</label>
+        <input type="text" name="valorItem" id="valorItem">
+        <div id="btns">
+            <button id="btnGravar" onclick="gravarValorItem()">Gravar</button>
+            <button id="btnCancelar" onclick="closePopupValorItem()">Cancelar</button>
+        </div>
+        
+    </div>
+    
+    
     <script src="../js/js.js"></script>
 </body>
 </html>

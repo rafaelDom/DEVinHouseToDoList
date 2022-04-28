@@ -1,13 +1,16 @@
 function inserirItemLista(){
-
     const textInput = getTextInput();
+
     if(textInput == false){
         return
     }
-    
-    adicionarItemNaLista(textInput)
-    addLocalStorage(textInput)
-    cleanInputText()
+
+    if(itemJaCadastrado(textInput)){
+        alert('Item já cadastrado na lista!!!')
+        return false
+    }
+
+    poupValorItem() 
 }
 
 function getTextInput(){
@@ -31,6 +34,7 @@ function adicionarItemNaLista(item){
     const deleteItem = document.createElement('i')
     deleteItem.setAttribute('class', 'fa fa-2x fas fa-times-circle')
     const buttonDelete = document.createElement('button')
+    buttonDelete.setAttribute('onClick', 'excluirItem(parentNode)')
     buttonDelete.appendChild(deleteItem)
     textItemList.innerText = item
     itemLista.appendChild(inputCheck)
@@ -43,32 +47,119 @@ function adicionarItemNaLista(item){
 
 function cleanInputText(){
     document.getElementById('itemLista').value = ''
+    document.getElementById('valorItem').value = ''
 }
 
-function addLocalStorage(itemLista){
-    const itensLSStr = JSON.stringify(localStorage)
-    const itensLS = JSON.parse(itensLSStr);
-    
-    let items = []
+function addLocalStorage(item, valor){
+    const lsItems = JSON.parse(localStorage.getItem('itemLista'))
+    let itemsLS = localStorage.getItem('itemLista') !== null ? lsItems : []
 
-    for (const key in itensLS){
-        if(key.includes('itemLista')){
-            items.push(localStorage.getItem(key))
-        }
+    const objItem = {
+        item: item,
+        valor: valor
     }
+    itemsLS.push(objItem)
+    localStorage.setItem('itemLista', JSON.stringify(itemsLS))
 
-    items.push(itemLista)
-    localStorage.setItem('itemLista', items)
 }
 
 function carregarNaListaOlocalStorage(){
-    const itensLSStr = JSON.stringify(localStorage)
-    const itensLS = JSON.parse(itensLSStr);
+    document.getElementById('lista').innerHTML = '';
+    if(localStorage.itemLista){
+        const itemsLS = localStorage.getItem('itemLista')
+        const items = JSON.parse(itemsLS)
 
-    for (const key in itensLS){
-        if(key.includes('itemLista')){
-            const itensLista = localStorage.getItem(key).split(',')
-            itensLista.forEach(item => adicionarItemNaLista(item))
+        const itemLista = items.map( item => item.item + ' | R$ ' + item.valor)
+
+        itemLista.forEach(item => {
+            adicionarItemNaLista(item)
+        });
+    }
+}
+
+function poupValorItem(){
+  document.getElementById('popupValorItem').style.display = 'block'
+  document.getElementById('lista').style.display = 'none'
+}
+
+function closePopupValorItem(){
+    document.getElementById('popupValorItem').style.display = 'none'
+    document.getElementById('lista').style.display = 'block'
+}
+
+function getValorItem(){
+    const valorItem = document.getElementById('valorItem').value
+    const regexp = new RegExp(/\d+,\d{2,}$/i);
+    const isValor = regexp.test(valorItem);
+
+    if(!isValor){
+        alert('Valor inválido, favor inserir vírgula para as casa decimais. Exemplo 10,00');
+        return false;
+    }else{
+        return valorItem
+    }
+}
+
+function gravarValorItem(){
+
+    const textInput = getTextInput();
+    if(textInput == false){
+        return false
+    }
+
+    if(!itemJaCadastrado(textInput)){
+        const valorItem = getValorItem()
+
+        if(!valorItem){
+            return false
+        }
+
+        closePopupValorItem()
+
+        adicionarItemNaLista(textInput + ' | R$ ' + valorItem)
+        addLocalStorage(textInput, valorItem)
+
+        cleanInputText()
+    }else{
+        alert('Item já cadastrado na lista!!!')
+        return false
+    }
+}
+
+function itemJaCadastrado(itemPesquisar){
+    if(localStorage.itemLista){
+        const itemsLS = localStorage.getItem('itemLista')
+        const items = JSON.parse(itemsLS)
+
+        for (let index = 0; index < items.length; index++) {
+            const element = items[index];
+            if(element.item === itemPesquisar){
+                return true
+            }
         }
     }
+    return false
+}
+
+function excluirItem(itemExcluir){
+    if (confirm('Você deseja excluir o item: ' + itemExcluir.innerText + '?') == true) {
+        const itemExcluirSplit = itemExcluir.innerText.split('|')
+        const itemExcluirFmt = itemExcluirSplit[0].replace(/\s+/g, '')
+
+        if(localStorage.itemLista){
+            const itemsLS = localStorage.getItem('itemLista')
+            const items = JSON.parse(itemsLS)
+
+            for (let index = 0; index < items.length; index++) {
+                const element = items[index];
+                if(element.item === itemExcluirFmt){
+                    items.splice(index, 1);
+                    localStorage.setItem('itemLista', JSON.stringify(items))
+                    carregarNaListaOlocalStorage()
+                    return true
+                }
+            }
+        }
+    } 
+    return false
 }
