@@ -272,3 +272,14 @@ function mostrarTotalDeItensLista(){
         document.getElementById('totalitensLista').innerText = `O total de itens cadastrados na lista é: ${totalItensLista}`
     }
 }
+
+function darkMode() {
+    const isChecked = document.getElementById('darkModeBtn').checked
+    const element = document.body;
+    if(isChecked){
+        element.className = "dark-mode";
+    }else{
+        element.className = "";
+    }
+
+  }
