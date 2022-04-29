@@ -26,11 +26,28 @@
     <div class="geralLista">
         <div class="inserirItemLista">
             <h1>Inserir item na lista:</h1>
-            <input type="text" id="itemLista">
+            <input type="text" id="itemLista" maxlength="30">
             <button onclick="inserirItemLista()">Inserir</button>
+
+            <div id="filtros">
+                <input type="radio" name="filtro" value="todosItems" onclick="carregarNaListaOlocalStorage()"> Todos Items
+                <input type="radio" name="filtro" value="comprados" onclick="carregarNaListaOsItemsCompradoslocalStorage()"> Comprados
+                <input type="radio" name="filtro" value="pendentes" onclick="carregarNaListaOsItemsPendenteslocalStorage()"> Pendentes
+            </div>
+ 
+            <div id="totalitensLista">
+                <span>0</span>
+            </div>
+
             <ul id="lista"></ul>
         </div>
+        <div id="totalCompras">
+            <h2>Total da compra:</h2>
+            <span id="valorTotalCompras"></span>
+        </div>
     </div>
+
+
 
     <div id="popupValorItem" class="popupValorItem">
         <a href="" onclick="closePopupValorItem()" title="Fechar" class="fechar">x</a>
@@ -41,7 +58,6 @@
             <button id="btnGravar" onclick="gravarValorItem()">Gravar</button>
             <button id="btnCancelar" onclick="closePopupValorItem()">Cancelar</button>
         </div>
-        
     </div>
     
     

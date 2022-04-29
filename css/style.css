@@ -31,14 +31,14 @@ header > p{
 body{
     background:  linear-gradient( -0.2turn, #DCDCDC, #ffffff);
     box-shadow: inset 0 0 5em 1em #343a40;
-    width: 100vw;
-    height: 100vh;
+    min-width: 100vw;
+    min-height: 100vh;
     font-family: 'Bebas Neue', cursive;
 }
 
 h1{
     font-family: 'Sigmar One', cursive;
-    font-size: 2.5rem;
+    font-size: 2.6rem;
 }
 
 .geralLista{
@@ -49,7 +49,6 @@ h1{
 .inserirItemLista{
     margin-top: 50px;
     font-size: 1.5rem;
-    width: 50%;
 }
 
 .inserirItemLista > input{
@@ -62,23 +61,23 @@ h1{
 }
 
 .inserirItemLista > button{
-    width: 80px;
-    height: 35px;
+    width: 100px;
+    height: 36px;
     color: #fff;
     background-color: #007bff;
     border-color: #007bff;
     border-style: none;
-    font-size: 1rem;
+    font-size: 1.2rem;
     border: none;
     border-radius: 5px;
+    margin-left: 10px;
 }
 
 #lista{
-    margin-top: 50px;
     color: #fff;
     background-color: #343a40;
     border-color: #343a40;
-    width: 450px;
+    width: 500px;
     border-radius: 5px;
 }
 
@@ -164,4 +163,27 @@ h1{
 
   #btns{
       margin-left: 30px;
+  }
+
+  #totalCompras{
+    font-size: 2rem;
+    margin-top: 15%;
+    margin-left: 50px;
+    
+  }
+
+  #totalCompras > span{
+    font-size: 3rem;
+  }
+
+  #filtros{
+      margin-top: 30px;
+  }
+  
+  #filtros > input{
+      margin-left: 40px;
+  }
+
+  #totalitensLista{
+    margin-top: 30px;
   }

@@ -1,3 +1,5 @@
+var elementoSelecionadoLista = ""
+
 function inserirItemLista(){
     const textInput = getTextInput();
 
@@ -8,9 +10,17 @@ function inserirItemLista(){
     if(itemJaCadastrado(textInput)){
         alert('Item já cadastrado na lista!!!')
         return false
-    }
+    } 
 
-    poupValorItem() 
+    if(!itemJaCadastrado(textInput)){
+        addLocalStorage(textInput, valorItem)
+        carregarNaListaOlocalStorage()
+        carregarValorTotalDoLocalStorage()
+        cleanInputText()
+    }else{
+        alert('Item já cadastrado na lista!!!')
+        return false
+    }
 }
 
 function getTextInput(){
@@ -27,27 +37,34 @@ function getTextInput(){
 function adicionarItemNaLista(item){
     const lista = document.getElementById('lista')
     const itemLista = document.createElement('li')
+    itemLista.setAttribute('class','itemLista')
     const textItemList = document.createElement('span')
     const inputCheck = document.createElement('input')
     inputCheck.setAttribute('type','checkbox')
-    inputCheck.setAttribute('id','itemComprado')
+    inputCheck.setAttribute('class','itemComprado')
+    inputCheck.setAttribute('onClick', 'marcarItemComoComprado(parentNode)')
     const deleteItem = document.createElement('i')
     deleteItem.setAttribute('class', 'fa fa-2x fas fa-times-circle')
     const buttonDelete = document.createElement('button')
     buttonDelete.setAttribute('onClick', 'excluirItem(parentNode)')
     buttonDelete.appendChild(deleteItem)
-    textItemList.innerText = item
+    textItemList.innerText = item['item']
     itemLista.appendChild(inputCheck)
     itemLista.appendChild(textItemList)
     itemLista.appendChild(buttonDelete)
-
     lista.appendChild(itemLista)
 
+    if(Object.entries(item['valor']).length > 0){
+        itemLista.style.textDecoration = "line-through";
+        inputCheck.checked = true
+    } 
+    mostrarTotalDeItensLista()
 }
 
 function cleanInputText(){
     document.getElementById('itemLista').value = ''
     document.getElementById('valorItem').value = ''
+    document.getElementById('itemLista').focus()
 }
 
 function addLocalStorage(item, valor){
@@ -64,27 +81,33 @@ function addLocalStorage(item, valor){
 }
 
 function carregarNaListaOlocalStorage(){
+    document.getElementsByName('filtro')[0].checked = true
     document.getElementById('lista').innerHTML = '';
     if(localStorage.itemLista){
         const itemsLS = localStorage.getItem('itemLista')
         const items = JSON.parse(itemsLS)
 
-        const itemLista = items.map( item => item.item + ' | R$ ' + item.valor)
+        const itemLista = items.map( item => item)
 
         itemLista.forEach(item => {
             adicionarItemNaLista(item)
         });
+        carregarValorTotalDoLocalStorage()
+        mostrarTotalDeItensLista()
     }
 }
 
 function poupValorItem(){
   document.getElementById('popupValorItem').style.display = 'block'
   document.getElementById('lista').style.display = 'none'
+  document.getElementById('valorItem').focus()
 }
 
 function closePopupValorItem(){
     document.getElementById('popupValorItem').style.display = 'none'
     document.getElementById('lista').style.display = 'block'
+    carregarNaListaOlocalStorage()
+    carregarValorTotalDoLocalStorage()
 }
 
 function getValorItem(){
@@ -101,29 +124,22 @@ function getValorItem(){
 }
 
 function gravarValorItem(){
+    const valorItem = getValorItem()
 
-    const textInput = getTextInput();
-    if(textInput == false){
+    if(!valorItem){
         return false
     }
 
-    if(!itemJaCadastrado(textInput)){
-        const valorItem = getValorItem()
+    const item = elementoSelecionadoLista.innerText.trim()
 
-        if(!valorItem){
-            return false
-        }
-
-        closePopupValorItem()
-
-        adicionarItemNaLista(textInput + ' | R$ ' + valorItem)
-        addLocalStorage(textInput, valorItem)
-
-        cleanInputText()
-    }else{
-        alert('Item já cadastrado na lista!!!')
+    if(!gravarValorLocalStorage(item, valorItem)){
         return false
     }
+
+    closePopupValorItem()
+    document.getElementById('valorItem').value = ''
+    document.getElementById('itemLista').focus()
+   
 }
 
 function itemJaCadastrado(itemPesquisar){
@@ -143,8 +159,7 @@ function itemJaCadastrado(itemPesquisar){
 
 function excluirItem(itemExcluir){
     if (confirm('Você deseja excluir o item: ' + itemExcluir.innerText + '?') == true) {
-        const itemExcluirSplit = itemExcluir.innerText.split('|')
-        const itemExcluirFmt = itemExcluirSplit[0].replace(/\s+/g, '')
+        const itemExcluirFmt = itemExcluir.innerText.trim()
 
         if(localStorage.itemLista){
             const itemsLS = localStorage.getItem('itemLista')
@@ -156,10 +171,104 @@ function excluirItem(itemExcluir){
                     items.splice(index, 1);
                     localStorage.setItem('itemLista', JSON.stringify(items))
                     carregarNaListaOlocalStorage()
+                    carregarValorTotalDoLocalStorage()
                     return true
                 }
             }
         }
     } 
     return false
+}
+
+function marcarItemComoComprado(item){
+    elementoSelecionadoLista = item
+    poupValorItem()
+}
+
+function gravarValorLocalStorage(item, valor){
+    if(localStorage.itemLista){
+        const itemsLS = localStorage.getItem('itemLista')
+        const items = JSON.parse(itemsLS)
+
+        for (let index = 0; index < items.length; index++) {
+            const element = items[index];
+            if(element.item === item){
+                items[index].valor = valor
+                localStorage.setItem('itemLista', JSON.stringify(items))
+                carregarNaListaOlocalStorage()
+                carregarValorTotalDoLocalStorage()
+                return true
+            }
+        }
+    }
+    return false
+}
+
+function carregarValorTotalDoLocalStorage(){
+    document.getElementById('valorTotalCompras').innerText = '';
+    if(localStorage.itemLista){
+        const itemsLS = localStorage.getItem('itemLista')
+        const items = JSON.parse(itemsLS)
+
+        const valorTotal = items.filter(item => Object.entries(item['valor']).length > 0)
+                        .reduce((acc, item) => (parseFloat(acc) + parseFloat(item.valor)).toFixed(2), 0)
+
+        document.getElementById('valorTotalCompras').innerText = `R$ ${valorTotal}`
+        
+    }
+}
+
+document.getElementById('itemLista').addEventListener('keydown', function (event) {
+    if (event.key === "Enter"){
+        inserirItemLista()
+    }
+})
+
+document.getElementById('valorItem').addEventListener('keydown', function (event) {
+    if (event.key === "Enter"){
+        gravarValorItem()
+    }
+})
+
+function carregarNaListaOsItemsCompradoslocalStorage(){
+    document.getElementById('lista').innerHTML = '';
+    if(localStorage.itemLista){
+        const itemsLS = localStorage.getItem('itemLista')
+        const items = JSON.parse(itemsLS)
+
+        const itemLista = items.filter(item => Object.entries(item['valor']).length > 0)
+                            .map( item => item)
+
+        itemLista.forEach(item => {
+            adicionarItemNaLista(item)
+        });
+        carregarValorTotalDoLocalStorage()
+    }
+}
+
+function carregarNaListaOsItemsPendenteslocalStorage(){
+    document.getElementById('lista').innerHTML = '';
+    if(localStorage.itemLista){
+        const itemsLS = localStorage.getItem('itemLista')
+        const items = JSON.parse(itemsLS)
+
+        const itemLista = items.filter(item => Object.entries(item['valor']).length <= 0)
+                            .map( item => item)
+
+        itemLista.forEach(item => {
+            adicionarItemNaLista(item)
+        });
+        document.getElementById('valorTotalCompras').innerText = `R$ ${0}`
+    }
+}
+
+function mostrarTotalDeItensLista(){
+    if(localStorage.itemLista){
+        const itemsLS = localStorage.getItem('itemLista')
+        const items = JSON.parse(itemsLS)
+
+        const totalItensLista = items.length
+
+        document.getElementById('totalitensLista').innerText = `O total de itens cadastrados na lista é: ${totalItensLista}`
+    }
 }
