@@ -193,7 +193,7 @@ function gravarValorLocalStorage(item, valor){
         for (let index = 0; index < items.length; index++) {
             const element = items[index];
             if(element.item === item){
-                items[index].valor = valor
+                items[index].valor = valor.replace(',','.')
                 localStorage.setItem('itemLista', JSON.stringify(items))
                 carregarNaListaOlocalStorage()
                 carregarValorTotalDoLocalStorage()
@@ -210,8 +210,12 @@ function carregarValorTotalDoLocalStorage(){
         const itemsLS = localStorage.getItem('itemLista')
         const items = JSON.parse(itemsLS)
 
-        const valorTotal = items.filter(item => Object.entries(item['valor']).length > 0)
+        let valorTotal = items.filter(item => Object.entries(item['valor']).length > 0)
                         .reduce((acc, item) => (parseFloat(acc) + parseFloat(item.valor)).toFixed(2), 0)
+
+        if(valorTotal > 0){
+            valorTotal = valorTotal.replace('.',',')
+        }
 
         document.getElementById('valorTotalCompras').innerText = `R$ ${valorTotal}`
         
